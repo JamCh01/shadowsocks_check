@@ -6,21 +6,19 @@ import queue
 import psutil
 import signal
 import socket
+import argparse
 import requests
 import subprocess
 from time import sleep
 from threading import Thread
 
 COMMOND = 'ss-local -s {server} -p {port} -l {local} -k {password} -m {method} -t 2'
-SS_CONFIG = './gui-config.json'
 PROXIES = {
     'http': 'socks5h://127.0.0.1:{local}',
     'https': 'socks5h://127.0.0.1:{local}'
 }
 SOCKET_TIMEOUT = 2
 MAX_COUNT = 8
-PORT_RANGE = range(50000, 50010)
-GETPORTCOUNT = 4
 
 
 def init():
@@ -45,10 +43,6 @@ def json_filter(path):
 class QueueControl(object):
     def __init__(self):
         self.free = queue.Queue()
-
-    def init_queue(self):
-        for i in PORT_RANGE:
-            self.free.put(i)
 
     def put(self, i):
         self.free.put(i)
@@ -112,10 +106,10 @@ class Shadowsocks(Thread):
     def check(self):
         try:
             r = requests.get(
-                url='https://www.google.com',
+                url='https://api.ip.sb/jsonip',
                 proxies=self.kwargs.get('proxies'),
                 timeout=10)
-            if '<title>Google</title>' not in r.text:
+            if r.json():
                 if self.tcping(host=self.server, port=self.port):
                     print('{server} 检测正常'.format(server=self.server))
                 else:
@@ -136,16 +130,37 @@ class Shadowsocks(Thread):
         self.check()
 
 
+def args_filter():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--threads', dest='threads', type=int, default=10)
+    parser.add_argument(
+        '--start_port', dest='start_port', type=int, default=50000)
+    parser.add_argument(
+        '--config', dest='config_file', type=str, default='./gui-config.json')
+    parser.add_argument('--mode', dest='mode', type=str, default='ss')
+    args = parser.parse_args()
+    return {
+        'config_file': os.path.abspath(args.config_file),
+        'threads_num': args.threads,
+        'start_port': args.start_port,
+        'mode': args.mode
+    }
+
+
 def main():
     init()
-    free_ports = QueueControl()
-    free_ports.init_queue()
-    configs = QueueControl()
-    for config in json_filter(path=SS_CONFIG):
+    internal_config = args_filter()
+    free_ports, configs = QueueControl(), QueueControl()
+    for port in range(
+            internal_config.get('start_port'),
+            internal_config.get('start_port') +
+            internal_config.get('threads_num')):
+        free_ports.put(port)
+    for config in json_filter(path=internal_config.get('config_file')):
         configs.put(config)
     while not configs.is_empty():
         tasks = list()
-        for i in range(len(PORT_RANGE)):
+        for i in range(internal_config.get('threads_num')):
             try:
                 config = configs.get()
                 local = free_ports.get()
