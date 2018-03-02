@@ -5,22 +5,19 @@ import queue
 import psutil
 import signal
 import socket
+import argparse
 import requests
 import subprocess
 from time import sleep
 from threading import Thread
 
 COMMOND = 'ss-local -s {server} -p {port} -l {local} -k {password} -m {method} -t 2'
-SS_CONFIG = './gui-config.json'
 PROXIES = {
     'http': 'socks5h://127.0.0.1:{local}',
     'https': 'socks5h://127.0.0.1:{local}'
 }
 SOCKET_TIMEOUT = 2
 MAX_COUNT = 8
-THREADS = 10
-START_PORT = 50000
-PORT_RANGE = range(START_PORT, START_PORT + THREADS)
 
 
 def init():
@@ -132,16 +129,37 @@ class Shadowsocks(Thread):
         self.check()
 
 
+def args_filter():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--threads', dest='threads', type=int, default=10)
+    parser.add_argument(
+        '--start_port', dest='start_port', type=int, default=50000)
+    parser.add_argument(
+        '--config', dest='config_file', type=str, default='./gui-config.json')
+    parser.add_argument('--mode', dest='mode', type=str, default='ss')
+    args = parser.parse_args()
+    return {
+        'config_file': os.path.abspath(args.config_file),
+        'threads_num': args.threads,
+        'start_port': args.start_port,
+        'mode': args.mode
+    }
+
+
 def main():
     init()
+    internal_config = args_filter()
     free_ports, configs = QueueControl(), QueueControl()
-    for port in PORT_RANGE:
+    for port in range(
+            internal_config.get('start_port'),
+            internal_config.get('start_port') +
+            internal_config.get('threads_num')):
         free_ports.put(port)
-    for config in json_filter(path=SS_CONFIG):
+    for config in json_filter(path=internal_config.get('config_file')):
         configs.put(config)
     while not configs.is_empty():
         tasks = list()
-        for i in range(THREADS):
+        for i in range(internal_config.get('threads_num')):
             try:
                 config = configs.get()
                 local = free_ports.get()
