@@ -105,10 +105,10 @@ class Shadowsocks(Thread):
     def check(self):
         try:
             r = requests.get(
-                url='https://www.google.com',
+                url='https://api.ip.sb/jsonip',
                 proxies=self.kwargs.get('proxies'),
                 timeout=10)
-            if '<title>Google</title>' not in r.text:
+            if r.json():
                 if self.tcping(host=self.server, port=self.port):
                     print('{server} 检测正常'.format(server=self.server))
                 else:
