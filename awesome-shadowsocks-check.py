@@ -46,10 +46,6 @@ class QueueControl(object):
     def __init__(self):
         self.free = queue.Queue()
 
-    def init_queue(self):
-        for i in PORT_RANGE:
-            self.free.put(i)
-
     def put(self, i):
         self.free.put(i)
 
@@ -138,14 +134,14 @@ class Shadowsocks(Thread):
 
 def main():
     init()
-    free_ports = QueueControl()
-    free_ports.init_queue()
-    configs = QueueControl()
+    free_ports, configs = QueueControl(), QueueControl()
+    for port in PORT_RANGE:
+        free_ports.put(port)
     for config in json_filter(path=SS_CONFIG):
         configs.put(config)
     while not configs.is_empty():
         tasks = list()
-        for i in range(len(PORT_RANGE)):
+        for i in range(THREADS):
             try:
                 config = configs.get()
                 local = free_ports.get()
