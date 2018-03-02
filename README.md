@@ -16,7 +16,7 @@ cd awesome-shadowsocks-check
 pip3 install -r requirements.txt
 ```
 
-*BTW, Python3 Only.*
+*BTW, Python3 only and doesn't support WSL.*
 
 ## how to use it
 
