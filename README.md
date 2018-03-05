@@ -1,6 +1,7 @@
 # shadowsocks_check
 [![License](https://img.shields.io/github/license/Jormungendr/awesome-shadowsocks-check.svg)](https://github.com/Jormungendr/awesome-shadowsocks-check/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/Jormungendr/ProjHORUS.svg?branch=master)](https://travis-ci.org/Jormungendr/ProjHORUS.svg?branch=master)
+
 You can check your SS server status by this script. And it will be the most graceful way.
 
 ## how to install it
@@ -19,8 +20,9 @@ or use pypi
 pip3 install shadowsocks_check
 ```
 
-*BTW, Python3 only and doesn't support WSL.*
+*BTW, Python3 only.*
 
+*DID NOT SUPPORT WSL.*
 ## how to use it
 
 there are some supported arguments.
