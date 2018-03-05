@@ -1,5 +1,5 @@
 # shadowsocks_check
-<!-- [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html) -->
+[![License](https://img.shields.io/github/license/Jormungendr/awesome-shadowsocks-check.svg)](https://github.com/Jormungendr/awesome-shadowsocks-check/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/Jormungendr/ProjHORUS.svg?branch=master)](https://travis-ci.org/Jormungendr/ProjHORUS.svg?branch=master)
 You can check your SS server status by this script. And it will be the most graceful way.
 
