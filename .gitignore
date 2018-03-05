@@ -104,4 +104,4 @@ ENV/
 .vscode
 
 # User-config
-gui-config.json
+# gui-config.json
