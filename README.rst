@@ -1,4 +1,4 @@
-# awesome-shadowsocks-check
+# shadowsocks_check
 You can check your SS server status by this script. And it will be the most graceful way.
 
 ## how to install it
@@ -7,9 +7,8 @@ You should install shadowsocks-libev first. You can find how to install it [here
 
 clone this project and install
 ```
-git clone git@github.com:jamcplusplus/awesome-shadowsocks-check.git
-
-cd awesome-shadowsocks-check
+git clone git@github.com:jamcplusplus/shadowsocks_check.git
+cd shadowsocks_check
 python3 setup.py install
 ```
 
