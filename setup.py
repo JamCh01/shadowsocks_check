@@ -18,7 +18,7 @@ setup(
     package_data={'shadowsocks_check': ['README.rst', 'LICENSE']},
     entry_points={
         'console_scripts': [
-            'ss-check = shadowsocks_check.shadowsocks_check:main',
+            'ss-check = shadowsocks_check:main',
         ],
     },
     classifiers=[
