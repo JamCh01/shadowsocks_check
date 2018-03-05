@@ -12,7 +12,7 @@ setup(
     "You can check your SS server status by this script. And it will be the most graceful way.",
     author='JamCh01',
     author_email='jamcplusplus@gmail.com',
-    url='https://github.com/jamcplusplus/awesome-shadowsocks-check',
+    url='https://github.com/jamcplusplus/shadowsocks_check',
     packages=find_packages(),
     install_requires=['requests', 'psutil'],
     package_data={'shadowsocks_check': ['README.rst', 'LICENSE']},
