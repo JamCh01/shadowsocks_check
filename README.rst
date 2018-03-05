@@ -12,6 +12,11 @@ cd shadowsocks_check
 python3 setup.py install
 ```
 
+or use pypi
+```
+pip3 install shadowsocks_check
+```
+
 *BTW, Python3 Only.*
 
 ## how to use it
