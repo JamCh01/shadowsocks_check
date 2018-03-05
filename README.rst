@@ -5,22 +5,23 @@ You can check your SS server status by this script. And it will be the most grac
 
 You should install shadowsocks-libev first. You can find how to install it [here.](https://github.com/shadowsocks/shadowsocks-libev#installation)
 
-clone this project
+clone this project and install
 ```
 git clone git@github.com:jamcplusplus/awesome-shadowsocks-check.git
-```
 
-install requirements.txt
-```
 cd awesome-shadowsocks-check
-pip3 install -r requirements.txt
+python3 setup.py install
 ```
 
 *BTW, Python3 Only.*
 
 ## how to use it
 
-You should paste your config file, and must be renamed `gui-config.json`. Then, run it by:
+there are some supported arguments.
 ```
-python3 awesome-shadowsocks-check.py
+ss-check
+--threads             the number of threads
+--start_port          start port range,range(start_port, start_port+threads)
+--config              shadowsocks config file
+--mode                ss or ssr (fake now)
 ```
