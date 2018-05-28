@@ -7,7 +7,7 @@ You should install shadowsocks-libev first. You can find how to install it [here
 
 clone this project and install
 ```
-git clone git@github.com:jamcplusplus/shadowsocks_check.git
+git clone git@github.com:JamCh01/shadowsocks_check.git
 cd shadowsocks_check
 python3 setup.py install
 ```
@@ -25,7 +25,7 @@ there are some supported arguments.
 ```
 ss-check
 --threads             the number of threads
---start_port          start port range,range(start_port, start_port+threads)
+--start_port          start port range, range(start_port, start_port+threads)
 --config              shadowsocks config file
 --mode                ss or ssr (fake now)
 ```
