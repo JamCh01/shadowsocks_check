@@ -17,7 +17,9 @@ or use pypi
 pip3 install shadowsocks_check
 ```
 
-*BTW, Python3 only and doesn't support WSL.*
+*~~BTW, Python3 only and doesn't support WSL.~~*
+
+*Now,supported WSL Ubuntu 18.03.*
 
 ## how to use it
 
