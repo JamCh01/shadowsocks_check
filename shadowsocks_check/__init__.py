@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-# import ping
 import json
 import queue
 import psutil
@@ -9,7 +8,6 @@ import socket
 import argparse
 import requests
 import subprocess
-from time import sleep
 from threading import Thread
 
 COMMOND = 'ss-local -s {server} -p {port} -l {local} -k {password} -m {method} {obfs}'
@@ -21,7 +19,7 @@ SOCKET_TIMEOUT = 2
 MAX_COUNT = 8
 
 
-def init():
+def init_system():
     for p in psutil.process_iter(attrs=['pid', 'name']):
         if 'ss-local' in p.name():
             for child in p.children():
@@ -29,7 +27,11 @@ def init():
             os.kill(p.pid, signal.SIGKILL)
 
 
-def json_filter(path):
+def default_threads(path):
+    return len(json.load(open(path)).get('configs'))
+
+
+def get_config(path):
     configs = json.load(open(path)).get('configs')
     for config in configs:
         yield {
@@ -141,7 +143,6 @@ class Shadowsocks(Thread):
                 print('{server} 确认存在问题，请核查'.format(server=self.server))
         os.killpg(os.getpgid(self.ss.pid), signal.SIGTERM)
         self.kwargs.get('queue').put(self.local)
-        sleep(5)
 
     def run(self):
         self.check()
@@ -149,7 +150,7 @@ class Shadowsocks(Thread):
 
 def args_filter():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--threads', dest='threads', type=int, default=10)
+    parser.add_argument('--threads', dest='threads', type=int, default=0)
     parser.add_argument(
         '--start_port', dest='start_port', type=int, default=50000)
     parser.add_argument(
@@ -157,15 +158,20 @@ def args_filter():
     parser.add_argument('--mode', dest='mode', type=str, default='ss')
     args = parser.parse_args()
     return {
-        'config_file': os.path.abspath(args.config_file),
-        'threads_num': args.threads,
-        'start_port': args.start_port,
-        'mode': args.mode
+        'config_file':
+        os.path.abspath(args.config_file),
+        'threads_num':
+        args.threads if args.threads else
+        default_threads(path=os.path.abspath(args.config_file)),
+        'start_port':
+        args.start_port,
+        'mode':
+        args.mode
     }
 
 
 def main():
-    init()
+    init_system()
     internal_config = args_filter()
     free_ports, configs = QueueControl(), QueueControl()
     for port in range(
@@ -173,7 +179,7 @@ def main():
             internal_config.get('start_port') +
             internal_config.get('threads_num')):
         free_ports.put(port)
-    for config in json_filter(path=internal_config.get('config_file')):
+    for config in get_config(path=internal_config.get('config_file')):
         configs.put(config)
     while not configs.is_empty():
         tasks = list()

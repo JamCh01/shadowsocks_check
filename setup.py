@@ -6,13 +6,13 @@ with codecs.open('README.rst', encoding='utf-8') as f:
 
 setup(
     name="shadowsocks_check",
-    version="0.1",
+    version="0.2",
     license='https://www.gnu.org/licenses/lgpl-3.0.en.html',
     description=
     "You can check your SS server status by this script. And it will be the most graceful way.",
     author='JamCh01',
-    author_email='jamcplusplus@gmail.com',
-    url='https://github.com/jamcplusplus/shadowsocks_check',
+    author_email='me@jamchoi.cc',
+    url='https://github.com/JamCh01/shadowsocks_check',
     packages=find_packages(),
     install_requires=['requests', 'psutil'],
     package_data={'shadowsocks_check': ['README.rst', 'LICENSE']},
