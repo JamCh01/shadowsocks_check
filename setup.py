@@ -6,7 +6,7 @@ with codecs.open('README.rst', encoding='utf-8') as f:
 
 setup(
     name="shadowsocks_check",
-    version="0.2",
+    version="0.3",
     license='https://www.gnu.org/licenses/lgpl-3.0.en.html',
     description=
     "You can check your SS server status by this script. And it will be the most graceful way.",
